@@ -31,7 +31,7 @@ libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.0"
 
 ## Usage example
 
-```
+```java
 import com.clevercloud.testcontainers.warp10.Warp10Container;
 
 try (Warp10Container container = new Warp10Container(WARP10_VERSION)) {
