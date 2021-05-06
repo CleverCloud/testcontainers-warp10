@@ -2,158 +2,166 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+   <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.clever-cloud</groupId>
-    <artifactId>testcontainers-warp10</artifactId>
-    <version>1.0.0</version>
+   <groupId>com.clever-cloud</groupId>
+   <artifactId>testcontainers-warp10</artifactId>
+   <version>1.0.1</version>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <testcontainers.version>1.15.3</testcontainers.version>
-        <jackson.version>2.12.3</jackson.version>
-        <okhttp3.version>4.9.1</okhttp3.version>
-        <slf4j.version>1.7.25</slf4j.version>
-    </properties>
+   <properties>
+      <maven.compiler.source>11</maven.compiler.source>
+      <maven.compiler.target>11</maven.compiler.target>
+      <testcontainers.version>1.15.3</testcontainers.version>
+      <jackson.version>2.12.3</jackson.version>
+      <okhttp3.version>4.9.1</okhttp3.version>
+      <slf4j.version>1.7.25</slf4j.version>
+   </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
-        </dependency>
+   <dependencies>
+      <dependency>
+         <groupId>org.testcontainers</groupId>
+         <artifactId>testcontainers</artifactId>
+         <version>${testcontainers.version}</version>
+      </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+      <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
+         <version>${jackson.version}</version>
+      </dependency>
 
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp3.version}</version>
-        </dependency>
+      <dependency>
+         <groupId>com.squareup.okhttp3</groupId>
+         <artifactId>okhttp</artifactId>
+         <version>${okhttp3.version}</version>
+      </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-    </dependencies>
-    <!-- Speficify the LICENSE -->
-    <licenses>
-       <license>
-          <name>The MIT License</name>
-          <url>https://mit-license.org/</url>
-       </license>
-    </licenses>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-jdk14</artifactId>
+         <version>${slf4j.version}</version>
+      </dependency>
+   </dependencies>
+   <!-- Speficify the LICENSE -->
+   <licenses>
+      <license>
+         <name>The MIT License</name>
+         <url>https://mit-license.org/</url>
+      </license>
+   </licenses>
 
-    <!-- Speficify the Developers -->
-    <developers>
-       <developer>
-          <name>Arnaud Lefebvre</name>
-          <email>arnaud.lefebvre@clever-cloud.com</email>
-          <organization>Clever Cloud</organization>
-          <organizationUrl>https://clever-cloud.com</organizationUrl>
-       </developer>
-    </developers>
+   <!-- Speficify the Developers -->
+   <developers>
+      <developer>
+         <name>Arnaud Lefebvre</name>
+         <email>arnaud.lefebvre@clever-cloud.com</email>
+         <organization>Clever Cloud</organization>
+         <organizationUrl>https://clever-cloud.com</organizationUrl>
+      </developer>
+   </developers>
 
-    <!-- Current SCM location -->
-    <scm>
-       <connection>scm:git:https://git@github.com/clevercloud/testcontainers-warp10.git</connection>
-       <developerConnection>scm:git:git@github.com:clevercloud/testcontainers-warp10.git</developerConnection>
-       <url>git@github.com:clevercloud/testcontainers-warp10.git</url>
-    </scm>
+   <!-- Current SCM location -->
+   <scm>
+      <connection>scm:git:https://git@github.com/clevercloud/testcontainers-warp10.git</connection>
+      <developerConnection>scm:git:git@github.com:clevercloud/testcontainers-warp10.git</developerConnection>
+      <url>git@github.com:clevercloud/testcontainers-warp10.git</url>
+   </scm>
 
-    <!-- Speficify the distribution management -->
-    <distributionManagement>
-       <repository>
-          <id>ossrh</id>
-          <name>Central Repository OSSRH</name>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-       </repository>
-    </distributionManagement>
+   <!-- Speficify the distribution management -->
+   <distributionManagement>
+      <repository>
+         <id>ossrh</id>
+         <name>Central Repository OSSRH</name>
+         <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository>
+   </distributionManagement>
 
-    <build>
-       <pluginManagement>
-          <plugins>
-             <plugin>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-             </plugin>
-             <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-             </plugin>
-             <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-             </plugin>
-          </plugins>
-       </pluginManagement>
+   <build>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <artifactId>maven-gpg-plugin</artifactId>
+               <version>1.6</version>
+            </plugin>
+            <plugin>
+               <artifactId>maven-source-plugin</artifactId>
+               <version>2.2.1</version>
+            </plugin>
+            <plugin>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>2.9.1</version>
+            </plugin>
+         </plugins>
+      </pluginManagement>
 
-       <plugins>
-          <!-- publish to nexus, autoReleaseAfterClose means that nexus tries to check if can be push to central, then do it and drop the staging package -->
-          <plugin>
-             <groupId>org.sonatype.plugins</groupId>
-             <artifactId>nexus-staging-maven-plugin</artifactId>
-             <version>1.6.7</version>
-             <extensions>true</extensions>
-             <configuration>
-                <serverId>ossrh</serverId>
-                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-             </configuration>
-          </plugin>
-          <!-- sign packages -->
-          <plugin>
-             <artifactId>maven-gpg-plugin</artifactId>
-             <executions>
-                <execution>
-                   <id>sign-artifacts</id>
-                   <phase>verify</phase>
-                   <goals>
-                      <goal>sign</goal>
-                   </goals>
-                </execution>
-             </executions>
-             <!-- Prevent pinentry from gpg agent as we are passing secret passphrase using mvn deploy -Dgpg.passphrase -->
-             <configuration>
-                <gpgArguments>
-                   <arg>--pinentry-mode</arg>
-                   <arg>loopback</arg>
-                </gpgArguments>
-             </configuration>
-          </plugin>
-          <!-- attach sources -->
-          <plugin>
-             <artifactId>maven-source-plugin</artifactId>
-             <executions>
-                <execution>
-                   <id>attach-sources</id>
-                   <goals>
-                      <goal>jar-no-fork</goal>
-                   </goals>
-                </execution>
-             </executions>
-          </plugin>
-          <!-- generate javadoc -->
-          <plugin>
-             <artifactId>maven-javadoc-plugin</artifactId>
-             <executions>
-                <execution>
-                   <id>attach-javadocs</id>
-                   <goals>
-                      <goal>jar</goal>
-                   </goals>
-                </execution>
-             </executions>
-             <configuration>
-                <additionalparam>-Xdoclint:none</additionalparam>
-             </configuration>
-          </plugin>
-       </plugins>
-    </build>
- </project>
+      <plugins>
+         <!-- publish to nexus, autoReleaseAfterClose means that nexus tries to check if can be push to central, then do it and drop the staging package -->
+         <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+               <serverId>ossrh</serverId>
+               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+               <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+         </plugin>
+         <!-- attach sources -->
+         <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                     <goal>jar-no-fork</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <!-- generate javadoc -->
+         <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-javadocs</id>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+   <profiles>
+      <profile>
+         <id>deploy</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-gpg-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                           <goal>sign</goal>
+                        </goals>
+                     </execution>
+                  </executions>
+                  <configuration>
+                     <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                     </gpgArguments>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+    </project>
