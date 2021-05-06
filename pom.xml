@@ -42,4 +42,118 @@
             <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
-</project>
+    <!-- Speficify the LICENSE -->
+    <licenses>
+       <license>
+          <name>The MIT License</name>
+          <url>https://mit-license.org/</url>
+       </license>
+    </licenses>
+
+    <!-- Speficify the Developers -->
+    <developers>
+       <developer>
+          <name>Arnaud Lefebvre</name>
+          <email>arnaud.lefebvre@clever-cloud.com</email>
+          <organization>Clever Cloud</organization>
+          <organizationUrl>https://clever-cloud.com</organizationUrl>
+       </developer>
+    </developers>
+
+    <!-- Current SCM location -->
+    <scm>
+       <connection>scm:git:https://git@github.com/clevercloud/testcontainers-warp10.git</connection>
+       <developerConnection>scm:git:git@github.com:clevercloud/testcontainers-warp10.git</developerConnection>
+       <url>git@github.com:clevercloud/testcontainers-warp10.git</url>
+    </scm>
+
+    <!-- Speficify the distribution management -->
+    <distributionManagement>
+       <repository>
+          <id>ossrh</id>
+          <name>Central Repository OSSRH</name>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+       </repository>
+    </distributionManagement>
+
+    <build>
+       <pluginManagement>
+          <plugins>
+             <plugin>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+             </plugin>
+             <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+             </plugin>
+             <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+             </plugin>
+          </plugins>
+       </pluginManagement>
+
+       <plugins>
+          <!-- publish to nexus, autoReleaseAfterClose means that nexus tries to check if can be push to central, then do it and drop the staging package -->
+          <plugin>
+             <groupId>org.sonatype.plugins</groupId>
+             <artifactId>nexus-staging-maven-plugin</artifactId>
+             <version>1.6.7</version>
+             <extensions>true</extensions>
+             <configuration>
+                <serverId>ossrh</serverId>
+                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                <autoReleaseAfterClose>true</autoReleaseAfterClose>
+             </configuration>
+          </plugin>
+          <!-- sign packages -->
+          <plugin>
+             <artifactId>maven-gpg-plugin</artifactId>
+             <executions>
+                <execution>
+                   <id>sign-artifacts</id>
+                   <phase>verify</phase>
+                   <goals>
+                      <goal>sign</goal>
+                   </goals>
+                </execution>
+             </executions>
+             <!-- Prevent pinentry from gpg agent as we are passing secret passphrase using mvn deploy -Dgpg.passphrase -->
+             <configuration>
+                <gpgArguments>
+                   <arg>--pinentry-mode</arg>
+                   <arg>loopback</arg>
+                </gpgArguments>
+             </configuration>
+          </plugin>
+          <!-- attach sources -->
+          <plugin>
+             <artifactId>maven-source-plugin</artifactId>
+             <executions>
+                <execution>
+                   <id>attach-sources</id>
+                   <goals>
+                      <goal>jar-no-fork</goal>
+                   </goals>
+                </execution>
+             </executions>
+          </plugin>
+          <!-- generate javadoc -->
+          <plugin>
+             <artifactId>maven-javadoc-plugin</artifactId>
+             <executions>
+                <execution>
+                   <id>attach-javadocs</id>
+                   <goals>
+                      <goal>jar</goal>
+                   </goals>
+                </execution>
+             </executions>
+             <configuration>
+                <additionalparam>-Xdoclint:none</additionalparam>
+             </configuration>
+          </plugin>
+       </plugins>
+    </build>
+ </project>
