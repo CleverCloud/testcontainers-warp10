@@ -4,6 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
+   <name>testcontainers-warp10</name>
+   <description>Testcontainers implementation for Warp10, the Geo Time Series database.</description>
+   <url>https://github.com/CleverCloud/testcontainers-warp10</url>
    <groupId>com.clever-cloud</groupId>
    <artifactId>testcontainers-warp10</artifactId>
    <version>1.0.1</version>
