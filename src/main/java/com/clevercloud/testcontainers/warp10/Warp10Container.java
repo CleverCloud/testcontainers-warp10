@@ -31,6 +31,10 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
       this(DEFAULT_IMAGE_NAME.withTag(tag));
    }
 
+   public Warp10Container(final String tag, final File macrosFolder) throws FileNotFoundException {
+      this(DEFAULT_IMAGE_NAME.withTag(tag), macrosFolder);
+   }
+
    public Warp10Container(final DockerImageName dockerImageName) {
       super(dockerImageName);
 
@@ -43,7 +47,7 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
       );
    }
 
-   public Warp10Container(final DockerImageName dockerImageName, File macrosFolder) throws FileNotFoundException {
+   public Warp10Container(final DockerImageName dockerImageName, final File macrosFolder) throws FileNotFoundException {
       this(dockerImageName);
 
       if (!macrosFolder.exists()) {
