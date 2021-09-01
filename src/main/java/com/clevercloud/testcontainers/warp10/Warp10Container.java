@@ -3,10 +3,13 @@ package com.clevercloud.testcontainers.warp10;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -38,6 +41,16 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
                          .forStatusCode(404)
                          .withStartupTimeout(Duration.ofMinutes(2))
       );
+   }
+
+   public Warp10Container(final DockerImageName dockerImageName, File macrosFolder) throws FileNotFoundException {
+      this(dockerImageName);
+
+      if (!macrosFolder.exists()) {
+         throw new FileNotFoundException("File " + macrosFolder.getAbsolutePath() + " does not exist");
+      } else {
+         this.withFileSystemBind(macrosFolder.getAbsolutePath(), "/data/warp10/macros", BindMode.READ_ONLY);
+      }
    }
 
    @Override
