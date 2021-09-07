@@ -1,0 +1,41 @@
+<%
+  SAVE 'context' STORE
+
+  'list' STORE
+  NOW 'NOW' STORE
+
+  $list SIZE 6 ==
+  'Fetch_after can only have 6 parameters : read_token, class, labels, start, end, active_after'
+  ASSERTMSG
+
+  $list 0 GET 'rtoken' STORE
+  $list 1 GET 'class' STORE
+  $list 2 GET 'labels' STORE
+  $list 3 GET 'start_ts' STORE
+  $list 4 GET 'end_ts' STORE
+  $list 5 GET 'active_after_ts' STORE
+
+  // Activity is taken account after at least 2 h
+  <% $active_after_ts $NOW 2 h - > %>
+  <%
+    {
+      'token' $rtoken
+      'labels' $labels
+      'class' $class
+      'start' $start_ts
+      'end' $end_ts
+      'active.after' $NOW 2 h -
+    } FETCH
+  %>
+  <%
+    {
+      'token' $rtoken
+      'active.after' $active_after_ts
+      'labels' $labels
+      'class' $class
+      'start' $start_ts
+      'end' $end_ts
+    } FETCH
+  %> IFTE
+  $context RESTORE
+%>

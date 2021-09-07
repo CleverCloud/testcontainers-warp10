@@ -3,13 +3,12 @@ package com.clevercloud.testcontainers.warp10;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
+import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -31,13 +30,33 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
       this(DEFAULT_IMAGE_NAME.withTag(tag));
    }
 
-   public Warp10Container(final String tag, final File macrosFolder) throws FileNotFoundException {
-      this(DEFAULT_IMAGE_NAME.withTag(tag), macrosFolder);
+   /**
+    * Instantiate warp10 container with server-side macros.
+    *
+    * @param tag version tag for the docker image.
+    * @param macrosFolder File pointing at the macros folder you want to install.
+    *                     This should be a full "macros folder" as defined in warp10's doc:
+    *                     the macros **must** be placed into subfolders.
+    */
+   public Warp10Container(final String tag, final File macrosFolder) {
+      super(new ImageFromDockerfile()
+               .withFileFromFile(macrosFolder.getPath(), macrosFolder)
+               .withDockerfileFromBuilder(builder -> builder
+                  .from(DEFAULT_IMAGE_NAME.withTag(tag).asCanonicalNameString())
+                  .add(macrosFolder.getPath(), "/opt/warp10/macros/")
+                  .build()
+               )
+      );
+      this.init(DEFAULT_IMAGE_NAME.withTag(tag));
    }
 
    public Warp10Container(final DockerImageName dockerImageName) {
       super(dockerImageName);
 
+      this.init(dockerImageName);
+   }
+
+   private void init(final DockerImageName dockerImageName) {
       logger().info("Starting a Warp10 container using [{}]", dockerImageName);
       addExposedPort(WARP10_DEFAULT_PORT);
       setWaitStrategy(new HttpWaitStrategy()
@@ -45,16 +64,6 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
                          .forStatusCode(404)
                          .withStartupTimeout(Duration.ofMinutes(2))
       );
-   }
-
-   public Warp10Container(final DockerImageName dockerImageName, final File macrosFolder) throws FileNotFoundException {
-      this(dockerImageName);
-
-      if (!macrosFolder.exists()) {
-         throw new FileNotFoundException("File " + macrosFolder.getAbsolutePath() + " does not exist");
-      } else {
-         this.withFileSystemBind(macrosFolder.getAbsolutePath(), "/data/warp10/macros", BindMode.READ_ONLY);
-      }
    }
 
    @Override
