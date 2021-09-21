@@ -9,7 +9,7 @@
    <url>https://github.com/CleverCloud/testcontainers-warp10</url>
    <groupId>com.clever-cloud</groupId>
    <artifactId>testcontainers-warp10</artifactId>
-   <version>1.0.4</version>
+   <version>1.0.5</version>
 
    <properties>
       <maven.compiler.source>11</maven.compiler.source>
