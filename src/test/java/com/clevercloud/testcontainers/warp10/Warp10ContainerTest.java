@@ -18,6 +18,7 @@ public class Warp10ContainerTest {
    private static final String Warp10GTS = "1// test{} 42";
    private static final String Warp10MacroGTS = "1// test{} 42\n50// test{} 1337";
    private static final String Warp10FetchMacroGTS = "[ '%s' 'test' {} 40 NOW 10 ] @me/test";
+   private static final String Warp10FetchMacroAndConfigGTS = "[ '%s' 'test' {} 40 NOW 10 ] @me/testlimit";
    private static final String Warp10UpdateAPI = "/api/v0/update";
    private static final String Warp10Version = "2.7.5";
 
@@ -56,6 +57,22 @@ public class Warp10ContainerTest {
          assertEquals(200, putGTS.code());
 
          Response getGTS = warp10Request(container, Warp10FetchAPI, String.format(Warp10FetchMacroGTS, container.getReadToken()), null);
+         System.out.println(getGTS.body().string());
+         assertEquals(200, getGTS.code());
+         assertNotNull(getGTS.header(Warp10FetchedHeader));
+         assertEquals(1, Integer.parseInt(getGTS.header(Warp10FetchedHeader)));
+      }
+   }
+
+   @Test
+   public void warp10WithMacrosAndConfig() throws IOException {
+      try (Warp10Container container = new Warp10Container(Warp10Version, new File("src/test/resources/macros"), new File("src/test/resources/conf.d"))) {
+         container.start();
+
+         Response putGTS = warp10Request(container, Warp10UpdateAPI, Warp10MacroGTS, container.getWriteToken());
+         assertEquals(200, putGTS.code());
+
+         Response getGTS = warp10Request(container, Warp10FetchAPI, String.format(Warp10FetchMacroAndConfigGTS, container.getReadToken()), null);
          System.out.println(getGTS.body().string());
          assertEquals(200, getGTS.code());
          assertNotNull(getGTS.header(Warp10FetchedHeader));

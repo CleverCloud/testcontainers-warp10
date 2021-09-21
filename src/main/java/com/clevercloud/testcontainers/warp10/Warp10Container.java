@@ -30,23 +30,32 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
       this(DEFAULT_IMAGE_NAME.withTag(tag));
    }
 
+
    /**
     * Instantiate warp10 container with server-side macros.
     *
-    * @param tag version tag for the docker image.
+    * @param tag          version tag for the docker image.
     * @param macrosFolder File pointing at the macros folder you want to install.
     *                     This should be a full "macros folder" as defined in warp10's doc:
     *                     the macros **must** be placed into subfolders.
     */
    public Warp10Container(final String tag, final File macrosFolder) {
-      super(new ImageFromDockerfile()
-               .withFileFromFile(macrosFolder.getPath(), macrosFolder)
-               .withDockerfileFromBuilder(builder -> builder
-                  .from(DEFAULT_IMAGE_NAME.withTag(tag).asCanonicalNameString())
-                  .add(macrosFolder.getPath(), "/opt/warp10/macros/")
-                  .build()
-               )
-      );
+      this(tag, macrosFolder, null);
+   }
+
+   /**
+    * Instantiate warp10 container with server-side macros and config override.
+    *
+    * @param tag          version tag for the docker image.
+    * @param macrosFolder File pointing at the macros folder you want to install.
+    *                     This should be a full "macros folder" as defined in warp10's doc:
+    *                     the macros **must** be placed into subfolders.
+    * @param configFolder File pointing at the configuration files you want to install.
+    *                     The files in this folder should look like XX-name.conf.template (e.g. 20-warpscript.conf.template).
+    *                     They will override the template configuration files in /opt/warp10/conf.templates/standalone
+    */
+   public Warp10Container(final String tag, final File macrosFolder, final File configFolder) {
+      super(setupImage(tag, macrosFolder, configFolder));
       this.init(DEFAULT_IMAGE_NAME.withTag(tag));
    }
 
@@ -54,6 +63,33 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
       super(dockerImageName);
 
       this.init(dockerImageName);
+   }
+
+   private static ImageFromDockerfile setupImage(final String tag, final File macrosFolder, final File configFolder) {
+      ImageFromDockerfile image = new ImageFromDockerfile();
+      if (macrosFolder != null) {
+         if (macrosFolder.exists()) {
+            image.withFileFromFile(macrosFolder.getPath(), macrosFolder);
+         } else {
+            throw new RuntimeException(String.format("Macro folder %s does not exist", macrosFolder.getPath()));
+         }
+      }
+      if (configFolder != null) {
+         if (configFolder.exists()) {
+            image.withFileFromFile(configFolder.getPath(), configFolder);
+         } else {
+            throw new RuntimeException(String.format("Config folder %s does not exist", configFolder.getPath()));
+         }
+      }
+      return image.withDockerfileFromBuilder(builder -> {
+         builder.from(DEFAULT_IMAGE_NAME.withTag(tag).asCanonicalNameString());
+         if (macrosFolder != null && macrosFolder.exists())
+            builder.add(macrosFolder.getPath(), "/opt/warp10/macros/");
+         if (configFolder != null && configFolder.exists())
+            builder.add(configFolder.getPath(), "/opt/warp10/conf.templates/standalone/");
+
+         builder.build();
+      });
    }
 
    private void init(final DockerImageName dockerImageName) {
