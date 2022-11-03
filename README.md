@@ -13,20 +13,20 @@ Add the following to your project:
 <dependency>
   <groupId>com.clever-cloud</groupId>
   <artifactId>testcontainers-warp10</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 
 ### build.gradle
 
 ```
-implementation 'com.clever-cloud:testcontainers-warp10:1.0.3'
+implementation 'com.clever-cloud:testcontainers-warp10:1.0.6'
 ```
 
 ### build.sbt
 
 ```scala
-libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.3"
+libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.6"
 ```
 
 ## Usage example
@@ -39,7 +39,7 @@ try (Warp10Container container = new Warp10Container(WARP10_VERSION)) {
   container.start();
 
   // Do whatever you want with the http client ...
-  final String query = "['" + container.getReadToken() + "' 'item.temperature' { 'city' 'nantes' } '2021-01-01' TOTIMESTAMP '2021-05-01' TOTIMESTAMP ] FETCH"
+  final String query = "['" + container.getReadToken() + "' 'item.temperature' { 'city' 'nantes' } '2022-01-01' TOTIMESTAMP '2022-11-06' TOTIMESTAMP ] FETCH"
 
   final HttpClient client = /* Create HTTP Client with host container.getHTTPHostAddress() */
 
@@ -50,3 +50,4 @@ try (Warp10Container container = new Warp10Container(WARP10_VERSION)) {
 ```
 
 (Disclaimer: this code will not compile. It's just so you get an idea!)
+

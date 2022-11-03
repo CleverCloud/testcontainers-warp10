@@ -9,15 +9,15 @@
    <url>https://github.com/CleverCloud/testcontainers-warp10</url>
    <groupId>com.clever-cloud</groupId>
    <artifactId>testcontainers-warp10</artifactId>
-   <version>1.0.5</version>
+   <version>1.0.6</version>
 
    <properties>
       <maven.compiler.source>11</maven.compiler.source>
       <maven.compiler.target>11</maven.compiler.target>
-      <testcontainers.version>1.16.0</testcontainers.version>
-      <jackson.version>2.12.3</jackson.version>
-      <okhttp3.version>4.9.1</okhttp3.version>
-      <slf4j.version>1.7.25</slf4j.version>
+      <testcontainers.version>1.17.5</testcontainers.version>
+      <jackson.version>2.13.4</jackson.version>
+      <okhttp3.version>4.9.3</okhttp3.version>
+      <slf4j.version>2.0.3</slf4j.version>
    </properties>
 
    <dependencies>
