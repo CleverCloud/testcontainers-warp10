@@ -11,6 +11,7 @@ import org.testcontainers.utility.DockerImageName;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import org.testcontainers.utility.ImageNameSubstitutor;
 
 public class Warp10Container extends GenericContainer<Warp10Container> {
    private static final DockerImageName DEFAULT_IMAGE_NAME = DockerImageName.parse("warp10io/warp10");
@@ -82,7 +83,9 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
          }
       }
       return image.withDockerfileFromBuilder(builder -> {
-         builder.from(DEFAULT_IMAGE_NAME.withTag(tag).asCanonicalNameString());
+         builder.from(ImageNameSubstitutor.instance()
+                 .apply(DEFAULT_IMAGE_NAME.withTag(tag))
+                 .asCanonicalNameString());
          if (macrosFolder != null && macrosFolder.exists())
             builder.add(macrosFolder.getPath(), "/opt/warp10/macros/");
          if (configFolder != null && configFolder.exists())
