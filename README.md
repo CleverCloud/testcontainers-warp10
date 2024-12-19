@@ -1,4 +1,4 @@
-# testcontainers-warp10 (an awesome project)
+# testcontainers-warp10
 
 This implements a Java [testcontainer](https://www.testcontainers.org/) for the
 [Warp10](https://www.warp10.io/) Geo Time Series db.
@@ -13,20 +13,20 @@ Add the following to your project:
 <dependency>
   <groupId>com.clever-cloud</groupId>
   <artifactId>testcontainers-warp10</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 </dependency>
 ```
 
 ### build.gradle
 
 ```
-implementation 'com.clever-cloud:testcontainers-warp10:1.0.6'
+implementation 'com.clever-cloud:testcontainers-warp10:1.0.7'
 ```
 
 ### build.sbt
 
 ```scala
-libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.6"
+libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.7"
 ```
 
 ## Usage example
