@@ -14,9 +14,9 @@
    <properties>
       <maven.compiler.source>11</maven.compiler.source>
       <maven.compiler.target>11</maven.compiler.target>
-      <testcontainers.version>1.17.5</testcontainers.version>
-      <jackson.version>2.13.4</jackson.version>
-      <okhttp3.version>4.9.3</okhttp3.version>
+      <testcontainers.version>1.20.4</testcontainers.version>
+      <jackson.version>2.13.4.2</jackson.version>
+      <okhttp3.version>4.12.0</okhttp3.version>
       <slf4j.version>2.0.3</slf4j.version>
    </properties>
 
@@ -84,15 +84,15 @@
          <plugins>
             <plugin>
                <artifactId>maven-gpg-plugin</artifactId>
-               <version>1.6</version>
+               <version>3.2.7</version>
             </plugin>
             <plugin>
                <artifactId>maven-source-plugin</artifactId>
-               <version>2.2.1</version>
+               <version>3.3.1</version>
             </plugin>
             <plugin>
                <artifactId>maven-javadoc-plugin</artifactId>
-               <version>2.9.1</version>
+               <version>3.11.2</version>
             </plugin>
          </plugins>
       </pluginManagement>
@@ -102,7 +102,7 @@
          <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.8</version>
+            <version>1.7.0</version>
             <extensions>true</extensions>
             <configuration>
                <serverId>ossrh</serverId>
