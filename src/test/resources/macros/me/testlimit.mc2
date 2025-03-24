@@ -16,13 +16,8 @@
   $list 5 GET 'active_after_ts' STORE
 
 
-  <%
-      ISAUTHENTICATED NOT
-  %>
-  <%
-      $rtoken AUTHENTICATE
-  %>
-  IFT
+$rtoken TOKENINFO 'ReadTokenDecodeError' CONTAINSKEY SWAP DROP NOT 'Read token is not valid' ASSERTMSG
+$rtoken CAPADD
 
   1000000000 LIMIT
 
