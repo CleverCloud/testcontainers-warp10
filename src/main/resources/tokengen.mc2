@@ -1,0 +1,41 @@
+JSONPRETTY
+
+'demo.CHANGEME' 'applicationName' STORE
+NOW 14 d + MSTU / 'expiryDate' STORE
+UUID 'ownerAndProducer' STORE
+
+{
+  'id' 'ReadToken'
+  'type' 'READ'
+  'application' $applicationName
+  'owner'  $ownerAndProducer
+  'issuance' NOW MSTU /
+  'expiry' $expiryDate
+  'labels' { }
+  'attributes' {
+     '.cap:tokengen'  ''
+     '.cap:limit' 10e9 TOLONG TOSTRING
+     '.cap:limits' ''
+  }
+  'owners' [ $ownerAndProducer ]
+  'producers' [ $ownerAndProducer ]
+  'applications' [ $applicationName ]
+}
+TOKENGEN
+
+{
+  'id' 'WriteToken'
+  'type' 'WRITE'
+  'application' $applicationName
+  'owner'  $ownerAndProducer
+  'producer' $ownerAndProducer
+  'issuance' NOW MSTU /
+  'expiry' $expiryDate
+  'labels' { }
+  'attributes' {
+     '.cap:tokengen'  ''
+     '.cap:limit' 10e9 TOLONG TOSTRING
+     '.cap:limits' ''
+  }
+}
+TOKENGEN

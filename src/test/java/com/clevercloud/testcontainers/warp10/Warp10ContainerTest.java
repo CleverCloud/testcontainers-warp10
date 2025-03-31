@@ -20,7 +20,7 @@ public class Warp10ContainerTest {
    private static final String Warp10FetchMacroGTS = "[ '%s' 'test' {} 40 NOW 10 ] @me/test";
    private static final String Warp10FetchMacroAndConfigGTS = "[ '%s' 'test' {} 40 NOW 10 ] @me/testlimit";
    private static final String Warp10UpdateAPI = "/api/v0/update";
-   private static final String Warp10Version = "2.7.5";
+   private static final String Warp10Version = "3.4.1-ubuntu-ci";
 
    ;
 
@@ -28,6 +28,7 @@ public class Warp10ContainerTest {
    public void warp10DefaultTest() {
       try (Warp10Container container = new Warp10Container(Warp10Version)) {
          container.start();
+
          assertNotNull(container.getReadToken());
          assertNotNull(container.getWriteToken());
       }
@@ -60,7 +61,7 @@ public class Warp10ContainerTest {
          System.out.println(getGTS.body().string());
          assertEquals(200, getGTS.code());
          assertNotNull(getGTS.header(Warp10FetchedHeader));
-         assertEquals(1, Integer.parseInt(getGTS.header(Warp10FetchedHeader)));
+            assertEquals(1, Integer.parseInt(getGTS.header(Warp10FetchedHeader)));
       }
    }
 
@@ -72,12 +73,13 @@ public class Warp10ContainerTest {
          Response putGTS = warp10Request(container, Warp10UpdateAPI, Warp10MacroGTS, container.getWriteToken());
          assertEquals(200, putGTS.code());
 
-         Response getGTS = warp10Request(container, Warp10FetchAPI, String.format(Warp10FetchMacroAndConfigGTS, container.getReadToken()), null);
+         Response getGTS = warp10Request(container, Warp10FetchAPI, String.format(Warp10FetchMacroAndConfigGTS, container.getReadToken()), container.getReadToken());
          System.out.println(getGTS.body().string());
          assertEquals(200, getGTS.code());
          assertNotNull(getGTS.header(Warp10FetchedHeader));
          assertEquals(1, Integer.parseInt(getGTS.header(Warp10FetchedHeader)));
       }
+
    }
 
    private Response warp10Request(Warp10Container container, String path, String body, String auth) throws IOException {

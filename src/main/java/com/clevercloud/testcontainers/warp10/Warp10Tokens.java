@@ -1,22 +1,36 @@
 package com.clevercloud.testcontainers.warp10;
 
-class Warp10Tokens {
-    private Warp10Token read;
-    private Warp10Token write;
+import java.util.List;
 
-    public Warp10Token getRead() {
-        return read;
+public class Warp10Tokens {
+    private List<TokenInfo> tokens;
+
+    public Warp10Tokens(TokenInfo[] tokens) {
+        this.tokens = List.of(tokens);
     }
 
-    public void setRead(Warp10Token read) {
-        this.read = read;
+    public List<TokenInfo> getTokens() {
+        return tokens;
     }
 
-    public Warp10Token getWrite() {
-        return write;
+    public TokenInfo getWriteToken() {
+        return tokens.stream()
+            .filter(token -> "WriteToken".equalsIgnoreCase(token.getId()))
+            .findFirst()
+            .orElse(null);
     }
 
-    public void setWrite(Warp10Token write) {
-        this.write = write;
+    public TokenInfo getReadToken() {
+        return tokens.stream()
+            .filter(token -> "ReadToken".equalsIgnoreCase(token.getId()))
+            .findFirst()
+            .orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Warp10Tokens{" +
+            "tokens=" + tokens +
+            '}';
     }
 }
