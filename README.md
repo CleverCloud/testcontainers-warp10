@@ -13,20 +13,20 @@ Add the following to your project:
 <dependency>
   <groupId>com.clever-cloud</groupId>
   <artifactId>testcontainers-warp10</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.9</version>
 </dependency>
 ```
 
 ### build.gradle
 
 ```
-implementation 'com.clever-cloud:testcontainers-warp10:1.0.7'
+implementation 'com.clever-cloud:testcontainers-warp10:1.0.9'
 ```
 
 ### build.sbt
 
 ```scala
-libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.7"
+libraryDependencies += "com.clever-cloud" % "testcontainers-warp10" % "1.0.9"
 ```
 
 ## Usage example
