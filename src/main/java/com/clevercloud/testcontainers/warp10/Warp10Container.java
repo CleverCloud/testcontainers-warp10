@@ -10,7 +10,12 @@ import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
@@ -120,10 +125,19 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
         }
     }
 
-    private void uploadTokenGen() {
-        File tokenGenFile = new File(Objects.requireNonNull(Warp10Container.class.getClassLoader().getResource("tokengen.mc2")).getFile());
-        MountableFile mountableFile = MountableFile.forHostPath(tokenGenFile.getAbsolutePath());
-        copyFileToContainer(mountableFile, "/opt/warp10/tokens/tokengen.mc2");
+    private void uploadTokenGen() throws IOException {
+        try (InputStream inputStream = Warp10Container.class.getClassLoader().getResourceAsStream("tokengen.mc2")) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource tokengen.mc2 not found");
+            }
+
+            Path tempPath = Files.createTempFile("tokengen", ".mc2");
+            Files.copy(inputStream, tempPath, StandardCopyOption.REPLACE_EXISTING);
+            tempPath.toFile().deleteOnExit();
+
+            MountableFile mountableFile = MountableFile.forHostPath(tempPath.toAbsolutePath());
+            copyFileToContainer(mountableFile, "/opt/warp10/tokens/tokengen.mc2");
+        }
     }
 
 
