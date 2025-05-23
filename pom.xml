@@ -9,15 +9,15 @@
    <url>https://github.com/CleverCloud/testcontainers-warp10</url>
    <groupId>com.clever-cloud</groupId>
    <artifactId>testcontainers-warp10</artifactId>
-   <version>2.0.1</version>
+   <version>2.0.2</version>
 
    <properties>
       <maven.compiler.source>11</maven.compiler.source>
       <maven.compiler.target>11</maven.compiler.target>
-      <testcontainers.version>1.20.4</testcontainers.version>
-      <jackson.version>2.13.4.2</jackson.version>
+      <testcontainers.version>1.21.0</testcontainers.version>
+      <jackson.version>2.19.0</jackson.version>
       <okhttp3.version>4.12.0</okhttp3.version>
-      <slf4j.version>2.0.3</slf4j.version>
+      <slf4j.version>2.0.17</slf4j.version>
    </properties>
 
    <dependencies>
@@ -70,15 +70,6 @@
       <url>git@github.com:clevercloud/testcontainers-warp10.git</url>
    </scm>
 
-   <!-- Speficify the distribution management -->
-   <distributionManagement>
-      <repository>
-         <id>ossrh</id>
-         <name>Central Repository OSSRH</name>
-         <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-      </repository>
-   </distributionManagement>
-
    <build>
       <pluginManagement>
          <plugins>
@@ -98,16 +89,13 @@
       </pluginManagement>
 
       <plugins>
-         <!-- publish to nexus, autoReleaseAfterClose means that nexus tries to check if can be push to central, then do it and drop the staging package -->
          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.7.0</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.7.0</version>
             <extensions>true</extensions>
             <configuration>
-               <serverId>ossrh</serverId>
-               <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-               <autoReleaseAfterClose>true</autoReleaseAfterClose>
+               <publishingServerId>central</publishingServerId>
             </configuration>
          </plugin>
          <!-- attach sources -->
@@ -164,4 +152,4 @@
          </build>
       </profile>
    </profiles>
-    </project>
+</project>
