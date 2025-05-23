@@ -97,6 +97,7 @@
             <configuration>
                <publishingServerId>central</publishingServerId>
                <checksums>all</checksums>
+               <autoPublish>true</autoPublish>
             </configuration>
          </plugin>
          <!-- attach sources -->
