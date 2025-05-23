@@ -96,6 +96,7 @@
             <extensions>true</extensions>
             <configuration>
                <publishingServerId>central</publishingServerId>
+               <checksums>all</checksums>
             </configuration>
          </plugin>
          <!-- attach sources -->
