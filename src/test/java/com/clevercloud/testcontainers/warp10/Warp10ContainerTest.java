@@ -9,6 +9,7 @@ import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class Warp10ContainerTest {
    private static final String Warp10AuthHeader = "X-Warp10-Token";
@@ -31,6 +32,42 @@ public class Warp10ContainerTest {
 
          assertNotNull(container.getReadToken());
          assertNotNull(container.getWriteToken());
+      }
+   }
+
+   @Test
+   public void warp10CryptoKeysExtraction() {
+      try (Warp10Container container = new Warp10Container(Warp10Version)) {
+         container.start();
+
+         // Verify crypto keys are extracted
+         Warp10CryptoKeys cryptoKeys = container.getCryptoKeys();
+         assertNotNull("CryptoKeys object should not be null", cryptoKeys);
+         assertTrue("CryptoKeys should be valid", cryptoKeys.isValid());
+
+         // Verify individual keys via getters
+         String aesTokenKey = container.getAesTokenKey();
+         String sipHashApp = container.getSipHashApp();
+         String sipHashToken = container.getSipHashToken();
+
+         assertNotNull("AES token key should not be null", aesTokenKey);
+         assertNotNull("SipHash app key should not be null", sipHashApp);
+         assertNotNull("SipHash token key should not be null", sipHashToken);
+
+         // Verify key lengths (AES = 64 hex chars = 32 bytes, SipHash = 32 hex chars = 16 bytes)
+         assertEquals("AES token key should be 64 hex characters (32 bytes)", 64, aesTokenKey.length());
+         assertEquals("SipHash app key should be 32 hex characters (16 bytes)", 32, sipHashApp.length());
+         assertEquals("SipHash token key should be 32 hex characters (16 bytes)", 32, sipHashToken.length());
+
+         // Verify keys are hex strings
+         assertTrue("AES token key should be a valid hex string", aesTokenKey.matches("[0-9a-fA-F]+"));
+         assertTrue("SipHash app key should be a valid hex string", sipHashApp.matches("[0-9a-fA-F]+"));
+         assertTrue("SipHash token key should be a valid hex string", sipHashToken.matches("[0-9a-fA-F]+"));
+
+         System.out.println("Extracted crypto keys successfully:");
+         System.out.println("  AES Token Key length: " + aesTokenKey.length());
+         System.out.println("  SipHash App length: " + sipHashApp.length());
+         System.out.println("  SipHash Token length: " + sipHashToken.length());
       }
    }
 

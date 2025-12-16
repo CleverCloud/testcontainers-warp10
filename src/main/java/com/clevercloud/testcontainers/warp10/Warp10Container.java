@@ -19,6 +19,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.testcontainers.utility.ImageNameSubstitutor;
 import org.testcontainers.utility.MountableFile;
@@ -31,7 +33,14 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
     private static final String WARP10_TOKEN_DEFAULT_APP_NAME = "test";
     private static final long WARP10_TOKEN_DEFAULT_VALIDITY = 365L * 24 * 3600 * 1000; // 1 year in milliseconds
 
+    // Crypto keys configuration
+    private static final String WARP10_CONFIG_PATH = "/opt/warp10/etc/conf.d/99-init.conf";
+    private static final Pattern AES_TOKEN_PATTERN = Pattern.compile("warp\\.aes\\.token\\s*=\\s*hex:([0-9a-fA-F]+)");
+    private static final Pattern SIP_HASH_APP_PATTERN = Pattern.compile("warp\\.hash\\.app\\s*=\\s*hex:([0-9a-fA-F]+)");
+    private static final Pattern SIP_HASH_TOKEN_PATTERN = Pattern.compile("warp\\.hash\\.token\\s*=\\s*hex:([0-9a-fA-F]+)");
+
     private Warp10Tokens WARP10_TOKENS = null;
+    private Warp10CryptoKeys WARP10_CRYPTO_KEYS = null;
 
     public Warp10Container() {
         this(DEFAULT_TAG);
@@ -118,11 +127,60 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
     @Override
     protected void containerIsStarted(InspectContainerResponse containerInfo) {
         try {
+            extractCryptoKeys();
             uploadTokenGen();
             generateTokens();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Extracts the cryptographic keys from the Warp10 configuration file.
+     * The keys are read from /opt/warp10/etc/conf.d/99-init.conf which contains:
+     * - warp.aes.token: 64 hex chars (32 bytes) for token encryption
+     * - warp.hash.app: 32 hex chars (16 bytes) for application hashing
+     * - warp.hash.token: 32 hex chars (16 bytes) for token hashing
+     */
+    private void extractCryptoKeys() throws IOException, InterruptedException {
+        ExecResult result = execInContainer("cat", WARP10_CONFIG_PATH);
+        if (result.getExitCode() != 0) {
+            String error = "Failed to read Warp10 config file: " + WARP10_CONFIG_PATH;
+            logger().error(error);
+            if (!result.getStderr().isEmpty()) {
+                logger().error("Stderr: " + result.getStderr());
+            }
+            throw new RuntimeException(error);
+        }
+
+        String configContent = result.getStdout();
+
+        String aesTokenKey = extractKey(configContent, AES_TOKEN_PATTERN, "warp.aes.token");
+        String sipHashApp = extractKey(configContent, SIP_HASH_APP_PATTERN, "warp.hash.app");
+        String sipHashToken = extractKey(configContent, SIP_HASH_TOKEN_PATTERN, "warp.hash.token");
+
+        WARP10_CRYPTO_KEYS = new Warp10CryptoKeys(aesTokenKey, sipHashApp, sipHashToken);
+
+        if (!WARP10_CRYPTO_KEYS.isValid()) {
+            logger().warn("Crypto keys may be invalid. AES key length: {}, SipHash App length: {}, SipHash Token length: {}",
+                aesTokenKey != null ? aesTokenKey.length() : 0,
+                sipHashApp != null ? sipHashApp.length() : 0,
+                sipHashToken != null ? sipHashToken.length() : 0);
+        }
+
+        logger().info("Successfully extracted Warp10 crypto keys");
+    }
+
+    /**
+     * Extracts a key value from the config content using a regex pattern.
+     */
+    private String extractKey(String content, Pattern pattern, String keyName) {
+        Matcher matcher = pattern.matcher(content);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        logger().warn("Could not find {} in Warp10 config", keyName);
+        return null;
     }
 
     private void uploadTokenGen() throws IOException {
@@ -194,5 +252,41 @@ public class Warp10Container extends GenericContainer<Warp10Container> {
 
     public String getProtocol() {
         return WARP10_PROTOCOL;
+    }
+
+    /**
+     * Gets all crypto keys as a single object.
+     *
+     * @return The Warp10CryptoKeys containing AES and SipHash keys, or null if not yet extracted
+     */
+    public Warp10CryptoKeys getCryptoKeys() {
+        return WARP10_CRYPTO_KEYS;
+    }
+
+    /**
+     * Gets the AES key used for token encryption.
+     *
+     * @return The AES token key as a hex string (64 characters = 32 bytes), or null if not available
+     */
+    public String getAesTokenKey() {
+        return WARP10_CRYPTO_KEYS != null ? WARP10_CRYPTO_KEYS.getAesTokenKey() : null;
+    }
+
+    /**
+     * Gets the SipHash key used for application hashing.
+     *
+     * @return The SipHash app key as a hex string (32 characters = 16 bytes), or null if not available
+     */
+    public String getSipHashApp() {
+        return WARP10_CRYPTO_KEYS != null ? WARP10_CRYPTO_KEYS.getSipHashApp() : null;
+    }
+
+    /**
+     * Gets the SipHash key used for token hashing.
+     *
+     * @return The SipHash token key as a hex string (32 characters = 16 bytes), or null if not available
+     */
+    public String getSipHashToken() {
+        return WARP10_CRYPTO_KEYS != null ? WARP10_CRYPTO_KEYS.getSipHashToken() : null;
     }
 }
